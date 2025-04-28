@@ -1,0 +1,139 @@
+{% extends "Base.html" %}
+
+{% block title %}Snort IDS Lab{% endblock %}
+
+{% block content %}
+<!-- Part 1: Introduction -->
+<details class="task-box" open>
+  <summary>
+    <span class="task-label">Part 1.</span> Introduction to Snort IDS
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Introduction</h3>
+    <p>
+      SNORT is a powerful open-source intrusion detection system (IDS) and intrusion prevention system (IPS) that provides real-time network traffic analysis and data packet logging.
+      SNORT uses a rule-based language that combines anomaly, protocol, and signature inspection methods to detect potentially malicious activity.
+    </p>
+    <p>
+      In this lab, we focus on deploying and configuring Snort, one of the most widely used open-source IDS platforms. Snort will be used purely in detection mode, passively observing network activities and flagging signs of known attack behaviors.
+    </p>
+    <p>The attacks targeted for detection in this lab include:</p>
+    <ul>
+      <li>ARP Cache Poisoning (used for Man-in-the-Middle attacks)</li>
+      <li>TCP Reset Injection (forcibly terminating TCP connections)</li>
+      <li>Reverse Shell Injection (gaining remote command access)</li>
+      <li>Reconnaissance Scanning (such as ping sweeps and SYN scans)</li>
+      <li>SYN Flooding (a type of Denial-of-Service attack)</li>
+    </ul>
+    <p>
+      Through writing custom Snort rules, running live traffic captures, and analyzing alerts, this lab demonstrates how low-level attacks can be identified based solely on packet behavior.
+    </p>
+  </div>
+</details>
+
+<!-- Part 2: Structure of a Snort Detection Rule -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 2.</span> Structure of a Detection Rule
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Structure of a Snort Detection Rule</h3>
+    <p>
+      Snort rules consist of two parts: the header and the options. The header defines the traffic we are interested in (protocol, IPs, ports, direction). The options describe the details of what to look for in the traffic (payload content, flags, size, etc.).
+    </p>
+    <h4>The Rule Header:</h4>
+    <p>The header defines:</p>
+    <ul>
+      <li><strong>What type of traffic</strong> (TCP, UDP, ICMP, IP)</li>
+      <li><strong>Where it is coming from</strong> (source IP, source port)</li>
+      <li><strong>Where it is going</strong> (destination IP, destination port)</li>
+      <li><strong>Which direction</strong> (using -> or <->)</li>
+    </ul>
+    <p>Example:</p>
+    <p><code>alert tcp any any -> any 23 (msg:"Telnet detected"; sid:1000001; rev:1;)</code></p>
+    <h4>The Rule Options:</h4>
+    <ul>
+      <li><strong>msg:</strong> Message to show when alert triggers.</li>
+      <li><strong>content:</strong> Text to search for inside the packet.</li>
+      <li><strong>sid:</strong> Snort ID (must be unique).</li>
+      <li><strong>rev:</strong> Rule revision number (for updates to the rule).</li>
+      <li><strong>flags:</strong> Check TCP flags (important for detecting scan types).</li>
+      <li><strong>flow:</strong> Describe connection direction and state (client->server, server->client, established, etc.).</li>
+    </ul>
+    <p>
+      To edit the file with the rules, use the command:
+      <p><code>nano /etc/snort/rules/local.rules</code></p>
+    </p>
+    <h4>Running Snort:</h4>
+    <p>
+      To run Snort, use the command below:
+      <p><code>snort -q -A console -i br-f8bfae7ae31c -c /etc/snort/snort.conf</code></p>
+      <ul>
+        <li><strong>-q:</strong> Quiet mode (suppress banner and statistics).</li>
+        <li><strong>-A console:</strong> Show alerts on the terminal screen.</li>
+        <li><strong>-i br-f8bfae7ae31c:</strong> Listen on the network interface.</li>
+        <li><strong>-c /etc/snort/snort.conf:</strong> Use the main configuration file that includes your rules.</li>
+      </ul>
+    </p>
+  </div>
+</details>
+
+<!-- Part 3: Snort Lab Tasks -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 3.</span> Snort Lab Tasks
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Snort Lab Tasks</h3>
+    <p>This lab uses 6 custom Snort rules to detect different types of attacks:</p>
+    <ul>
+      <li>ARP Spoofing (Man-in-the-Middle indicator)</li>
+      <li>SYN Flood (Denial-of-Service)</li>
+      <li>TCP Flood (Denial-of-Service)</li>
+      <li>TCP Session Hijacking (RST Injection)</li>
+      <li>Reverse Shell (Suspicious Outbound TCP)</li>
+      <li>Telnet Payload Injection</li>
+    </ul>
+
+    <div class="task-instructions">
+      <h3>Task 1: Test and Analyze</h3>
+      <p>Rerun the corresponding attacks, observe the Snort alerts, and analyze how effective the rules are.</p>
+      <p>Also, consider using Wireshark to observe the network traffic.</p>
+      <p>Write and report your findings based on what you observe.</p>
+    </div>
+
+    <div class="task-instructions">
+      <h3>Task 2: Improve Detection Rules</h3>
+      <p>Your second task is to select at least three rules and improve them to:</p>
+      <ul>
+        <li>Make detection stronger</li>
+        <li>Reduce false positives</li>
+        <li>Better match the actual attack behavior you observed</li>
+      </ul>
+      <p>You must show in your report:</p>
+      <ul>
+        <li>The original rule</li>
+        <li>The improved rule</li>
+        <li>A short explanation describing what you changed and why</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<!-- Part 4: Reminder and Resources -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 4.</span> Reminder & Resources
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Reminder:</h3>
+    <p>This only covers the necessary steps to learn the required tasks on this website. For in-depth knowledge on Snort, visit the official Snort documentation at:</p>
+    <p><a href="https://docs.snort.org/welcome" target="_blank">Snort Official Documentation</a></p>
+  </div>
+</details>
+
+{% endblock %}

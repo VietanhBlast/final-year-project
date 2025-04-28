@@ -1,0 +1,186 @@
+{% extends "Base.html" %}
+{% block title %}Recon Lab - Cybersecurity Reconnaissance{% endblock %}
+{% block content %}
+<!-- Part 1: What Is Cybersecurity Reconnaissance & How It Works (Open by default) -->
+<details class="task-box" open>
+  <summary>
+    <span class="task-label">Part 1.</span> What Is Cybersecurity Reconnaissance &amp; How It Works
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content recon-content">
+    <p>
+      Cybersecurity reconnaissance is the process of gathering detailed information about a target system, network, or organization
+      in order to identify potential vulnerabilities. It is the foundational step for many security assessments and penetration tests.
+    </p>
+    <p>
+      Reconnaissance is generally classified into:
+      <strong>Passive Reconnaissance</strong> – collecting publicly available data without directly engaging the target; and 
+      <strong>Active Reconnaissance</strong> – directly engaging with the target using scans and probes, though at a higher risk of detection.
+    </p>
+    <h3>How Reconnaissance Works</h3>
+    <h3>1. Determine the Scope of the Target Network</h3>
+    <p>
+      Attackers begin by researching the target to understand its size—identifying the IP range and deciding whether to target the entire network
+      or just a specific subnet. This helps define the area that will be monitored.
+    </p>
+    <h3>2. Locate Open Ports &amp; Access Points</h3>
+    <p>
+      Next, attackers scan for open ports and identify weak access points, such as unsecured endpoints or IoT devices.
+    </p>
+    <h3>3. Identify Services on the Ports</h3>
+    <p>
+      After identifying open ports, the attacker determines the services running on them. This step helps in planning further exploitation.
+    </p>
+    <h3>4. Map the Network</h3>
+    <p>
+      Creating a network map — detailing routers, firewalls, subnets, and endpoints — provides a visualization of the network infrastructure,
+      helping to identify critical assets.
+    </p>
+    <h3>5. Avoid Detection</h3>
+    <p>
+      Throughout reconnaissance, attackers use stealth techniques (e.g., spreading out scan requests) to avoid triggering security systems.
+    </p>
+  </div>
+</details>
+
+<!-- Part 2: Performing Reconnaissance Tasks (Collapsed by default) -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 2.</span> Performing Reconnaissance Tasks
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <p>
+      In this section, you will perform a series of reconnaissance tasks using a network scanning tool (nmap).
+    </p>
+    <div class="task-instructions">
+      <h3>Task 1: Host Discovery</h3>
+      <p>Scan the target network (e.g., 192.168.200.0/24) to determine how many IP addresses are active.</p>
+    </div>
+    <div class="task-instructions">
+      <h3>Task 2: Port Scanning</h3>
+      <p>Select an active host and perform a port scan to identify open ports and running services.</p>
+    </div>
+    <div class="task-instructions">
+      <h3>Task 3: OS Detection</h3>
+      <p>Conduct an OS detection scan on a target host to determine its operating system and version.</p>
+    </div>
+    <!-- Questions for Recon Tasks -->
+      <div class="question-container">
+        <h2>Questions</h2>
+        <div class="field-group">
+          <label for="q2a1">1. How many IPs are active on the scanned network?</label>
+          <input type="text" id="q2a1" placeholder="e.g., 15 IP addresses">
+        </div>
+        <div class="field-group">
+          <label for="q2a2">2. Which ports are open on the target (192.168.200.11) host ?</label>
+          <input type="text" id="q2a2" placeholder="e.g., 80, 443, 22">
+        </div>
+        <div class="field-group">
+          <label for="q2a3">3. What type of OS did you find?</label>
+          <input type="text" id="q2a3" placeholder="OS type">
+        </div>
+        <button onclick="checkReconAnswers()">Check Answers</button>
+        <div id="resultRecon"></div> <!-- This will display the result -->
+      </div>
+
+    <div class="task-instructions">
+      <h3>Task 4:  credentials sniffing</h3>
+      <p>During reconnaissance, unencrypted services can leak sensitive information. 
+        In this exercise, you will perform a Telnet login between two victim machines and use Wireshark to find the credentials.</p>
+        <p>On Victim A, start a Telnet session to Victim B: </p>
+        <p>telnet 192.168.200.11 </p>
+        <p>Login with credentials: </p>
+        <p>Username: alice </p>
+        <p>Password: password123  </p>
+    </div>
+  </div>
+</details>
+
+<!-- Part 3: Mitigating Reconnaissance (Collapsed by default) -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 3.</span> Mitigating Reconnaissance
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <p>
+      To protect against reconnaissance, organizations can implement strategies such as network segmentation, deploying honeypots,
+      using Intrusion Detection Systems (IDS), and continuously monitoring network traffic.
+    </p>
+    <ul>
+      <li><strong>Network Segmentation:</strong> Dividing the network into smaller segments to limit an attacker's movement.</li>
+      <li><strong>Honeypots:</strong> Deploying decoy systems to lure attackers away from critical assets.</li>
+      <li><strong>Intrusion Detection:</strong> Setting up systems like Snort to detect reconnaissance activity.</li>
+      <li><strong>Continuous Monitoring:</strong> Regularly reviewing logs and network traffic for suspicious patterns.</li>
+      <li><strong>User Training:</strong> Educating staff about security best practices and social engineering risks.</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Part 4: Reporting and Next Steps (Collapsed by default) -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 4.</span> Reporting and Next Steps
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <p>
+      After completing reconnaissance, compile your findings into a detailed report. This report should include:
+    </p>
+    <ul>
+      <li>An overview of discovered hosts, open ports, and running services.</li>
+      <li>Observations from OS detection scans and potential vulnerabilities.</li>
+      <li>Recommendations for strengthening network defenses and mitigating reconnaissance.</li>
+      <li>Plans for continuous monitoring and further security assessments.</li>
+    </ul>
+    <div class="task-instructions">
+      <h3>Task 5 Final</h3>
+      <p>Create a comprehensive report summarizing your recon activities, findings, and actionable recommendations to enhance network security.</p>
+    </div>
+  </div>
+</details>
+
+<script>
+  // Check answers for Recon Task Questions
+  function checkReconAnswers() {
+    const q2a1 = document.getElementById('q2a1').value;
+    const q2a2 = document.getElementById('q2a2').value;
+    const q2a3 = document.getElementById('q2a3').value;
+  
+    // Replace with the expected answers
+    const correctAnswers = {
+      q2a1: '4',   // Expected number of IPs active on the scanned network
+      q2a2: '80',   // Expected open ports on the target host
+      q2a3: 'Linux'   // Expected OS found
+    };
+  
+    let result = '';
+  
+    // Check the first question
+    if (q2a1 === correctAnswers.q2a1) {
+      result += 'Question 1: Correct! The number of active IPs is ' + correctAnswers.q2a1 + '.<br>';
+    } else {
+      result += 'Question 1: Incorrect. .<br> ';
+    }
+  
+    // Check the second question
+    if (q2a2 === correctAnswers.q2a2) {
+      result += 'Question 2: Correct! The open ports are ' + correctAnswers.q2a2 + '.<br>';
+    } else {
+      result += 'Question 2: Incorrect. .<br>  ';
+    }
+  
+    // Check the third question
+    if (q2a3.toLowerCase() === correctAnswers.q2a3.toLowerCase()) {
+      result += 'Question 3: Correct! The OS found is ' + correctAnswers.q2a3 + '.<br>';
+    } else {
+      result += 'Question 3: Incorrect. .<br> ';
+    }
+  
+    // Display results
+    document.getElementById('resultRecon').innerHTML = result;
+  }
+  </script>
+  
+{% endblock %}

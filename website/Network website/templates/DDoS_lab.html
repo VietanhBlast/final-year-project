@@ -1,0 +1,305 @@
+{% extends "Base.html" %}
+{% block title %}DDoS Lab - Defensive Security Lab{% endblock %}
+{% block content %}
+<!-- Part 1: What is DDoS? (Open by default) -->
+<details class="task-box" open>
+  <summary>
+    <span class="task-label">Part 1.</span> What is DDoS?
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <p>
+      Distributed Denial of Service (DDoS) is a type of cyberattack where multiple compromised systems,
+      often forming a botnet, are used to target a single system, network, or service. The attackers flood
+      the target with a massive volume of traffic, causing degraded performance or complete unavailability for legitimate users.
+    </p>
+    <p>
+      DDoS attacks are a more advanced form of Denial of Service (DoS) attacks. Unlike DoS attacks,
+      which originate from a single source, DDoS attacks leverage a network of Internet-connected devices 
+      that have been infected with malware. These infected devices, known as bots or zombies, are controlled 
+      remotely to form a botnet. The attacker then directs this botnet to send traffic simultaneously, making it 
+      extremely challenging to separate attack traffic from normal traffic.
+    </p>
+    <p>
+      <strong>Common Types of DDoS Attacks:</strong><br>
+      DDoS attacks can target various layers of a network connection based on the OSI model. The model includes 7 layers:
+      Application, Presentation, Session, Transport, Network, Data Link, and Physical. Attacks may target the network layer 
+      (e.g., TCP/UDP floods) or the application layer (e.g., HTTP floods), often using a combination of methods to bypass defenses.
+    </p>
+    <!-- Quiz in Part 1 (MCQ) -->
+    <div class="question-container">
+      <h2>Quiz: Understanding DDoS</h2>
+      <p><strong>Question 1:</strong> What is the primary difference between a DoS attack and a DDoS attack?</p>
+      <div class="mcq-option">
+        <input type="radio" id="q1a1" name="q1" value="A">
+        <label for="q1a1">A) DoS attacks come from a single source, while DDoS attacks originate from multiple sources.</label>
+      </div>
+      <div class="mcq-option">
+        <input type="radio" id="q1a2" name="q1" value="B">
+        <label for="q1a2">B) DoS attacks are always more powerful than DDoS attacks.</label>
+      </div>
+      <div class="mcq-option">
+        <input type="radio" id="q1a3" name="q1" value="C">
+        <label for="q1a3">C) There is no difference between DoS and DDoS attacks.</label>
+      </div>
+      <p><strong>Question 2:</strong> What is a botnet?</p>
+      <div class="mcq-option">
+        <input type="radio" id="q2a1" name="q2" value="A">
+        <label for="q2a1">A) A group of computers attacking a network simultaneously.</label>
+      </div>
+      <div class="mcq-option">
+        <input type="radio" id="q2a2" name="q2" value="B">
+        <label for="q2a2">B) A network of infected devices controlled remotely to launch attacks.</label>
+      </div>
+      <div class="mcq-option">
+        <input type="radio" id="q2a3" name="q2" value="C">
+        <label for="q2a3">C) A software program that protects against DDoS attacks.</label>
+      </div>
+      <button onclick="checkDDoSAnswers()">Check Answers</button>
+      <div id="resultDDoS"></div> <!-- This will display the result -->
+    </div>
+  </div>
+</details>
+
+<!-- Part 2: How does a DDoS attack work? (Collapsed by default) -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 2.</span> How does a DDoS attack work?
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <p>
+      DDoS attacks overwhelm a target's resources by flooding it with an unsustainable amount of traffic.
+      Attackers use several techniques:
+    </p>
+    <ul>
+      <li>
+        <strong>TCP Flood:</strong> Sending a large number of TCP connection requests to exhaust server resources.
+      </li>
+      <li>
+        <strong>SYN Flood:</strong> Sending numerous SYN packets without completing the handshake, causing the server to tie up resources.
+      </li>
+      <li>
+        <strong>HTTP Flood:</strong> Overloading a target with massive numbers of HTTP requests, targeting the application layer.
+      </li>
+    </ul>
+    <p>
+      These attack methods are often executed using botnets, making it difficult to distinguish malicious traffic from legitimate traffic.
+    </p>
+    <!-- Part 2: DDoS Attack Mechanisms Quiz -->
+    <div class="question-container">
+      <h2>Quiz: DDoS Attack Mechanisms</h2>
+      <p><strong>Question 1:</strong> Which of the following is NOT a method of DDoS attack?</p>
+      <div class="mcq-option">
+        <input type="radio" id="q3a1" name="q3" value="A">
+        <label for="q3a1">A) TCP Flood</label>
+      </div>
+      <div class="mcq-option">
+        <input type="radio" id="q3a2" name="q3" value="B">
+        <label for="q3a2">B) SYN Flood</label>
+      </div>
+      <div class="mcq-option">
+        <input type="radio" id="q3a3" name="q3" value="C">
+        <label for="q3a3">C) SQL Injection</label>
+      </div>
+      <p><strong>Question 2:</strong> How does a SYN flood attack exploit the TCP handshake process?</p>
+      <div class="mcq-option">
+        <input type="radio" id="q4a1" name="q4" value="A">
+        <label for="q4a1">A) It completes the handshake quickly to exhaust the session.</label>
+      </div>
+      <div class="mcq-option">
+        <input type="radio" id="q4a2" name="q4" value="B">
+        <label for="q4a2">B) It sends numerous SYN packets without completing the handshake, tying up server resources.</label>
+      </div>
+      <div class="mcq-option">
+        <input type="radio" id="q4a3" name="q4" value="C">
+        <label for="q4a3">C) It sends malformed packets that crash the server.</label>
+      </div>
+      <button onclick="checkDDoSMechanismsAnswers()">Check Answers</button>
+      <div id="resultDDoSMechanisms"></div> <!-- This will display the result -->
+    </div>
+  </div>
+</details>
+
+<!-- Part 3: Performing DDoS Attacks (Collapsed) -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 3.</span> Performing DDoS Attacks
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <!-- Task 1: TCP Flood Attack -->
+    <div class="task-instructions">
+      <h3>Task 1: TCP Flood Attack</h3>
+      <p><strong>On Victim B:</strong> This system will serve as the target web server.</p>
+      <ul>
+        <li>Start the Apache server: <code>service apache2 start</code></li>
+        <li>Verify with: <code>curl http://192.168.200.11</code></li>
+      </ul>
+      <p><strong>On the Attacker:</strong></p>
+      <ul>
+        <li>Launch the TCP flood attack: <code>python3 tcp_flood.py</code></li>
+      </ul>
+      <p><strong>Back on Victim B:</strong></p>
+      <ul>
+        <li>Test with: <code>curl http://192.168.200.11</code> (response should slow down)</li>
+      </ul>
+    </div>
+    <!-- Task 2: SYN Attack -->
+    <div class="task-instructions">
+      <h3>Task 2: SYN Attack</h3>
+      <p><strong>On Victim B:</strong> Confirm server responsiveness using: <code>curl http://192.168.200.11</code></p>
+      <p><strong>On the Attacker:</strong></p>
+      <ul>
+        <li>Initiate a SYN flood using hping3: <code>hping3 -S -p 80 --flood --rand-source 192.168.200.11</code></li>
+        <li>Or run: <code>python3 syn.py</code></li>
+      </ul>
+      <p><strong>Back on Victim B:</strong></p>
+      <ul>
+        <li>Test again with: <code>curl http://192.168.200.11</code> (the response should slow significantly)</li>
+        <li>Monitor pending connections: <code>watch -n 1 "netstat -ant | grep :80 | grep SYN_RECV | wc -l"</code></li>
+      </ul>
+    </div>
+    <!-- Task 3: HTTP Flood Attack -->
+    <div class="task-instructions">
+      <h3>Task 3: HTTP Flood Attack</h3>
+      <p><strong>On Victim B:</strong> Verify normal responsiveness with: <code>curl http://192.168.200.11</code></p>
+      <p><strong>On the Attacker:</strong> Launch an HTTP flood attack: <code>python3 http_flood.py</code></p>
+      <p><strong>Back on Victim B:</strong> Test the responsiveness again, which may show degradation or unresponsiveness.</p>
+    </div>
+    <!-- Task 4: Optional Server Configuration -->
+    <div class="task-instructions">
+      <h3>Task 4 (Optional): Weaken the Server</h3>
+      <p>
+        For testing, adjust the server's TCP settings to lower resource limits. This includes reducing SYN-ACK retries, lowering the maximum SYN backlog, 
+        and disabling TCP syncookies.
+      </p>
+      <ul>
+        <li>View current settings: <code>sysctl net.ipv4.tcp_syncookies</code>, <code>sysctl net.ipv4.tcp_max_syn_backlog</code>, <code>sysctl net.ipv4.tcp_synack_retries</code></li>
+        <li>Then adjust:
+          <br><code>sysctl -w net.ipv4.tcp_synack_retries=5</code>
+          <br><code>sysctl -w net.ipv4.tcp_max_syn_backlog=5</code>
+          <br><code>sysctl -w net.ipv4.tcp_syncookies=0</code>
+        </li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<!-- Part 4: IDS + Defense Mechanisms -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 4.</span> IDS + Defense Mechanisms
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Intrusion Detection System (IDS)</h3>
+    <p>An Intrusion Detection System (IDS) is a tool used to monitor network traffic and identify suspicious behavior that may indicate an attack or security breach. IDS solutions like Snort are widely used in network security for detecting various types of attacks, including DDoS attacks.</p>
+
+    <h4>Detection of DDoS Attacks</h4>
+    <p>DDoS attacks can be difficult to detect due to the distributed nature of the attack. However, with the right IDS configuration, we can identify patterns and anomalies that signify an ongoing attack. Some key indicators that an IDS can look for in DDoS attacks include:</p>
+    <ul>
+      <li><strong>High Traffic Volume:</strong> A large volume of traffic targeting a single IP or service.</li>
+      <li><strong>Unusual Traffic Patterns:</strong> A sudden surge in traffic from multiple sources or geographical locations.</li>
+      <li><strong>Suspicious Packet Behavior:</strong> Abnormal packet sizes, fragmented packets, or a high number of requests to specific ports (e.g., HTTP, DNS, TCP).</li>
+    </ul>
+    <p>In this part of the lab, we will configure Snort to detect and alert us to potential DDoS traffic.</p>
+
+    <h4>Defense Mechanisms Against DDoS Attacks</h4>
+    <p>There are various defense strategies that can be employed to mitigate the impact of DDoS attacks:</p>
+    <ul>
+      <li><strong>Rate Limiting:</strong> Implement rate limiting on servers to restrict the number of requests a client can make in a given time period.</li>
+      <li><strong>Firewalls:</strong> Use firewalls to filter incoming traffic and block known malicious IP addresses.</li>
+      <li><strong>Geo-blocking:</strong> Block traffic from regions or countries not relevant to your service.</li>
+      <li><strong>Content Delivery Networks (CDN):</strong> Use a CDN to offload traffic and provide distributed denial-of-service protection.</li>
+      <li><strong>Anycast Routing:</strong> Use Anycast routing to distribute incoming traffic to multiple servers across different regions, thus distributing the load.</li>
+      <li><strong>Cloud-based DDoS Protection:</strong> Employ third-party cloud services to mitigate large-scale DDoS attacks before they reach your infrastructure.</li>
+    </ul>
+
+    <h3>Configuring Snort to Detect DDoS Attacks</h3>
+    <p>Snort is an open-source IDS that can be configured to detect various types of DDoS attacks, including SYN floods, TCP floods, and HTTP floods. In this task, we will create custom Snort rules to detect these attacks.</p>
+
+    <h4>Example Snort Rules</h4>
+    <p>Below are some basic Snort rules that can be used to detect DDoS attack patterns:</p>
+    <ul>
+      <li><strong>SYN Flood Detection:</strong>
+        <pre>alert tcp $EXTERNAL_NET any -> $HOME_NET 80 (msg:"SYN Flood Detected"; flags:S; threshold:type threshold, track by_src, count 100, seconds 1; sid:1000002;)</pre>
+      </li>
+      <li><strong>HTTP Flood Detection:</strong>
+        <pre>alert tcp $EXTERNAL_NET any -> $HOME_NET 80 (msg:"HTTP Flood Detected"; flow:to_server,established; content:"GET"; http_method; threshold:type threshold, track by_src, count 100, seconds 1; sid:1000003;)</pre>
+      </li>
+      <li><strong>TCP Flood Detection:</strong>
+        <pre>alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"TCP Flood Detected"; flags:S; threshold:type threshold, track by_src, count 200, seconds 10; sid:1000004;)</pre>
+      </li>
+    </ul>
+    <p>These rules help detect unusual patterns in traffic, which may indicate a DDoS attack in progress.</p>
+
+    <h3>Testing the IDS Setup</h3>
+    <p>Once Snort is configured with the above rules, run the DDoS attack simulations again and observe the Snort alerts. Analyze the alert messages to identify which type of attack was detected and how Snort identified it.</p>
+
+    <h4>Important Notes:</h4>
+    <ul>
+      <li>Make sure Snort is properly installed and configured before running the tests.</li>
+      <li>Ensure the custom rules are included in the Snort configuration file.</li>
+      <li>Regularly update Snort rules to keep up with evolving DDoS attack methods.</li>
+    </ul>
+
+    <h3>Conclusion</h3>
+    <p>By the end of this lab, you should be able to:</p>
+    <ul>
+      <li>Understand how IDS solutions like Snort can help detect DDoS attacks.</li>
+      <li>Configure Snort to detect common DDoS attack methods.</li>
+      <li>Implement basic defense mechanisms to mitigate DDoS attacks.</li>
+    </ul>
+  </div>
+  <script>
+    // Check answers for Part 1 (DDoS Understanding Quiz)
+    function checkDDoSAnswers() {
+      const q1Answer = document.querySelector('input[name="q1"]:checked');
+      const q2Answer = document.querySelector('input[name="q2"]:checked');
+    
+      let result = '';
+    
+      // Check the first question
+      if (q1Answer && q1Answer.value === 'A') {
+        result += 'Question 1: Correct! DoS attacks come from a single source, while DDoS attacks originate from multiple sources.<br>';
+      } else {
+        result += 'Question 1: Incorrect.<br>';
+      }
+    
+      // Check the second question
+      if (q2Answer && q2Answer.value === 'B') {
+        result += 'Question 2: Correct! A botnet is a network of infected devices controlled remotely to launch attacks.<br>';
+      } else {
+        result += 'Question 2: Incorrect.';
+      }
+    
+      document.getElementById('resultDDoS').innerHTML = result;
+    }
+    
+    // Check answers for Part 2 (DDoS Attack Mechanisms Quiz)
+    function checkDDoSMechanismsAnswers() {
+      const q3Answer = document.querySelector('input[name="q3"]:checked');
+      const q4Answer = document.querySelector('input[name="q4"]:checked');
+    
+      let result = '';
+    
+      // Check the first question
+      if (q3Answer && q3Answer.value === 'C') {
+        result += 'Question 1: Correct! SQL Injection is not a method of DDoS attack.<br>';
+      } else {
+        result += 'Question 1: Incorrect.';
+      }
+    
+      // Check the second question
+      if (q4Answer && q4Answer.value === 'B') {
+        result += 'Question 2: Correct! A SYN flood attack sends numerous SYN packets without completing the handshake, tying up server resources.<br>';
+      } else {
+        result += 'Question 2: Incorrect.<br>';
+      }
+    
+      document.getElementById('resultDDoSMechanisms').innerHTML = result;
+    }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends "Base.html" %}
+
+{% block title %}TCP Lab{% endblock %}
+
+{% block content %}
+<!-- Part 1: Introduction -->
+<details class="task-box" open>
+  <summary>
+    <span class="task-label">Part 1.</span> Introduction to TCP Attacks
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Introduction</h3>
+    <p>
+      The Transmission Control Protocol (TCP) is one of the foundational protocols of the Internet, designed for reliable, ordered communication.
+      However, TCP lacks built-in security mechanisms, making it vulnerable to various attacks where packets can be forged or sessions manipulated.
+    </p>
+    <p>
+      In this lab, students will explore two serious attacks against TCP sessions:
+    </p>
+    <ul>
+      <li><strong>TCP Reset Attack:</strong> Abruptly terminating a TCP session by injecting forged RST packets.</li>
+      <li><strong>Reverse Shell Injection Attack:</strong> Injecting commands into an active Telnet session to create a reverse shell back to the attacker.</li>
+    </ul>
+    <h3>Objective</h3>
+    <ul>
+      <li>Perform a TCP Reset Attack to forcibly terminate an active Telnet session.</li>
+      <li>Perform a Reverse Shell Injection Attack by injecting malicious payloads into a Telnet session.</li>
+      <li>Understand how TCP’s lack of authentication for packet origin allows session manipulation.</li>
+      <li>Observe the dangers of unencrypted, unauthenticated communication protocols.</li>
+    </ul>
+    <h3>Attack Scenarios</h3>
+    <h4>1. TCP Reset Attack:</h4>
+    <ul>
+      <li>Inject a TCP packet with the RST flag set to force a victim’s Telnet connection to terminate unexpectedly.</li>
+    </ul>
+    <h4>2. Reverse Shell Injection via Telnet:</h4>
+    <ul>
+      <li>Inject specially crafted packets into an existing Telnet session to execute a reverse shell command, connecting the victim's system back to the attacker.</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Part 2: Lab Setup + Attack Execution -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 2.</span> Lab Setup + Attack Execution
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Lab Setup:</h3>
+    <p>Two victim containers (Victim A and Victim B) and one attacker container. All are connected to the same Docker bridge network.</p>
+    <h3>Tools Used:</h3>
+    <ul>
+      <li>Scapy for packet crafting</li>
+      <li>Wireshark for traffic capture</li>
+    </ul>
+    <h3>Part 1: Steps to perform the TCP Reset Attack</h3>
+    <ol>
+      <li>On Victim B: Start the Telnet server with the following command:
+        <p><code>service openbsd-inetd restart</code></p>
+      </li>
+      <li>On the Attacker: Run the following command to gain network traffic between Victim A and Victim B:
+        <p><code>python3 mitm.py</code></p>
+      </li>
+      <li>On Victim A: Telnet to Victim B and login with Username (alice) and password (password123):
+        <p><code>telnet 192.168.200.11</code></p>
+      </li>
+      <li>On the Attacker: Run the TCP reset attack with the following command:
+        <p><code>python3 tcp_reset.py</code></p>
+      </li>
+    </ol>
+
+    <div class="question-container">
+        <h2>Question 1</h2>
+        <p>Did the Telnet session close immediately after the attack?</p>
+        <div class="field-group">
+          <label for="telnetClose">Answer</label>
+          <input type="text" id="telnetClose" placeholder="Yes/No" />
+        </div>
+        <button onclick="checkAnswers()">Check Answer</button>
+        <div id="result1"></div> <!-- This will display the result -->
+      </div>
+      
+
+    <h3>Part 2: Steps to perform the Reverse Shell Injection Attack</h3>
+    <ol>
+      <li>On Victim B: Start the Telnet server with the following command:
+        <p><code>service openbsd-inetd restart</code></p>
+      </li>
+      <li>On Victim A: Telnet to Victim B and login with Username (alice) and password (password123):
+        <p><code>telnet 192.168.200.11</code></p>
+      </li>
+      <li>On the Attacker (1st Terminal): Run the following command to gain network traffic between Victim A and Victim B:
+        <p><code>python3 mitm.py</code></p>
+      </li>
+      <li>On the Attacker (2nd Terminal): Run the following command to listen on port 9090:
+        <p><code>nc -lnvp 9090</code></p>
+      </li>
+      <li>On the Attacker (3rd Terminal): Run the Reverse Shell Injection attack to inject a reverse shell payload:
+        <p><code>reverse_shell.py</code></p>
+      </li>
+    </ol>
+
+    <div class="question-container">
+        <h2>Question 2</h2>
+        <p>Use the <code>whoami</code> command after running the reverse shell. What user do you see?</p>
+        <div class="field-group">
+          <label for="whoamiResult">Answer</label>
+          <input type="text" id="whoamiResult" placeholder="e.g. whoami" />
+        </div>
+        <button onclick="checkShellAnswer()">Check Answer</button>
+        <div id="result2"></div> <!-- This will display the result -->
+      </div>
+
+    <div class="task-instructions">
+        <h3>Task 1</h3>
+        <p>Use Wireshark to capture TCP traffic during the attacks.</p>
+        <p>Find the forged TCP RST packet that caused the Telnet session to drop. </p>
+        <p>Locate the injected reverse shell command inside the Telnet stream. </p>
+        <p>Document your findings. </p>
+        <p></p>
+      </div>
+  </div>
+</details>
+
+<!-- Part 3: IDS + Defense Mechanisms -->
+<details class="task-box">
+    <summary>
+      <span class="task-label">Part 3.</span> IDS + Defense Mechanisms
+      <span class="arrow-icon">&#9656;</span>
+    </summary>
+    <div class="task-content">
+      <h3>Important Note:</h3>
+      <p>
+        In this lab, we only explain detection and defense mechanisms. We are not deploying Snort yet.
+        IDS deployment will be performed later in the dedicated IDS Lab.
+      </p>
+  
+      <h3>Detection:</h3>
+      <h4>Detecting TCP Reset Attacks:</h4>
+      <p>
+        Snort can detect suspicious TCP Reset (RST) activity by monitoring abnormal RST packets in established sessions.
+        Detection strategies include:
+      </p>
+      <ul>
+        <li>Alerting when an RST packet is seen in a TCP session that is not closing naturally.</li>
+        <li>Detecting a high frequency of RST packets coming from unexpected sources.</li>
+        <li>Identifying RST packets with sequence numbers that do not match the expected session sequence.</li>
+      </ul>
+  
+      <h4>Detecting Reverse Shell Injection:</h4>
+      <p>
+        Reverse shell attacks typically generate unexpected outbound connections from internal hosts to attacker-controlled IP addresses.
+        Detection strategies include:
+      </p>
+      <ul>
+        <li>Monitoring outbound TCP connections on unusual ports (e.g., high-numbered ports).</li>
+        <li>Alerting on Telnet traffic carrying suspicious command patterns, such as bash -i or /dev/tcp/.</li>
+        <li>Detecting command injection attempts inside unencrypted Telnet sessions.</li>
+      </ul>
+  
+      <h3>Defending Against TCP Reset Attacks:</h3>
+      <ul>
+        <li><strong>Use Encrypted Protocols:</strong> Use SSH instead of Telnet to secure sessions. SSH uses encryption and authentication, making RST injection very difficult.</li>
+        <li><strong>TCP Session Hardening:</strong> Systems and applications can be configured to ignore unexpected RST packets unless they meet strict criteria (e.g., correct sequence numbers).</li>
+        <li><strong>Session Monitoring:</strong> Deploy tools that monitor TCP state transitions to detect abnormal session terminations.</li>
+        <li><strong>IDS/IPS Systems:</strong> Intrusion Prevention Systems (IPS) can automatically drop forged RST packets identified by Snort or similar tools.</li>
+      </ul>
+  
+      <h3>Defending Against Reverse Shell Injection:</h3>
+      <ul>
+        <li><strong>Strict Egress Filtering:</strong> Use firewalls to restrict outbound traffic, preventing victims from connecting to unknown external IP addresses.</li>
+        <li><strong>Encrypted and Authenticated Sessions:</strong> Enforce the use of SSH for remote management instead of unprotected Telnet.</li>
+        <li><strong>Command Inspection in Telnet:</strong> Monitor Telnet traffic (if it must be used) for suspicious commands being sent, and trigger alerts on detection.</li>
+        <li><strong>Segmentation and Least Privilege:</strong> Ensure internal machines have limited outbound network access and run services with minimal privileges.</li>
+        <li><strong>Real-Time Alerting:</strong> Set up IDS alerts for command injection patterns and suspicious outbound connections.</li>
+      </ul>
+  
+    </div>
+  </details>
+  <script>
+    // Check answers for Question 1 (TCP Reset Attack)
+    function checkAnswers() {
+      const telnetClose = document.getElementById('telnetClose').value.toLowerCase();
+      const correctAnswer = 'yes';  // Adjust the correct answer here (e.g., "yes" or "no")
+    
+      let result = '';
+      if (telnetClose === correctAnswer) {
+        result = 'Correct! The Telnet session was closed as expected after the attack.';
+      } else {
+        result = 'Incorrect. Please try again.';
+      }
+      document.getElementById('result1').innerHTML = result;
+    }
+    
+    // Check answers for Question 2 (Reverse Shell Injection)
+    function checkShellAnswer() {
+      const whoamiResult = document.getElementById('whoamiResult').value.toLowerCase();
+      const correctAnswer = 'root';  // Adjust the correct answer here (e.g., "root")
+    
+      let result = '';
+      if (whoamiResult === correctAnswer) {
+        result = 'Correct! The attacker successfully injected a reverse shell and gained root access.';
+      } else {
+        result = 'Incorrect. Please check the reverse shell and try again.';
+      }
+      document.getElementById('result2').innerHTML = result;
+    }
+    </script>
+    
+
+{% endblock %}

@@ -1,0 +1,233 @@
+{% extends "Base.html" %}
+{% block title %}ARP Lab{% endblock %}
+{% block content %}
+<!-- Part 1: open by default -->
+<details class="task-box" open>
+  <summary>
+    <span class="task-label">Part 1.</span> Introduction
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <p>
+      The Address Resolution Protocol (ARP) is a communication protocol used to discover the link-layer (MAC) address associated with a given IP address. ARP is a simple protocol and lacks any built-in security measures. 
+      As a result, it is vulnerable to ARP cache poisoning attacks, where attackers send forged ARP messages to a victim. By doing so, attackers can manipulate the victim’s ARP cache, associating a fake MAC address 
+      with a legitimate IP address. This positions the attacker in the middle of the communication, making it possible to intercept, modify, or block data transmissions. 
+    </p>
+    <p>
+      <strong>Objective</strong><br>
+      The goal of this lab is to provide students with hands-on experience performing ARP cache poisoning attacks.  
+      Tasks for the user: 
+      <ul>
+        <li>Perform an ARP poisoning attack against two victim containers. </li>
+        <li>Observe how an attacker can redirect traffic between two victim machines. </li>
+        <li>Launch a Man-in-the-Middle (MITM) attack by intercepting and modifying packets between victims. </li>
+        <li>Understand the security risks caused by ARP's lack of authentication. </li>
+      </ul>
+    </p>
+    <p>
+      <strong>Attack Scenarios</strong><br>
+      1. <strong>ARP Cache Poisoning</strong>: Inject forged ARP replies into the network to poison the ARP caches of target machines and redirect network traffic through the attacker’s machine.<br>
+      2. <strong>MITM Attack on Telnet using ARP Cache Poisoning</strong>: After successful cache poisoning, intercept and modify Telnet traffic between two victims. Demonstrate real-time manipulation of plaintext Telnet communications.
+    </p>
+  </div>
+</details>
+
+<!-- Part 2: Lab Setup + Attack Execution -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 2.</span> Lab Setup + Attack Execution
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Lab Setup and Execution Steps:</h3>
+    
+    <ol>
+      <li>To see the current ARP table of a machine (before poisoning), run:</li>
+      <p><code>arp -a</code></p>
+
+      <li>On the Attacker container, run the following command (keep this running):</li>
+      <p><code>python3 mitm.py</code></p>
+
+      <li>Check the current ARP table again (after poisoning) by running:</li>
+      <p><code>arp -a</code></p>
+    </ol>
+
+    <!-- Question 1 -->
+    <div class="question-container">
+      <h2>Question 1</h2>
+      <p>After using <code>arp -a</code> again on each Victim A and Victim B, have their MAC addresses changed?</p>
+      <div class="field-group">
+        <label for="victimA">Victim A MAC Address</label>
+        <input type="text" id="victimA" placeholder="e.g. new MAC address" />
+      </div>
+      <div class="field-group">
+        <label for="victimB">Victim B MAC Address</label>
+        <input type="text" id="victimB" placeholder="e.g. new MAC address" />
+      </div>
+      <button type="button" id="checkAnswers" onclick="checkAnswers()">Submit Answer</button>
+      <div id="result1"></div>
+    </div>
+
+    <h3>Next Steps:</h3>
+    <ol>
+      <li>Disable IP forwarding on the Attacker container:</li>
+      <p><code>echo 0 > /proc/sys/net/ipv4/ip_forward</code></p>
+
+      <li>On Victim A, ping Victim B:</li>
+      <p><code>ping 192.168.200.11</code></p>
+
+      <li>Enable IP forwarding on Victim A:</li>
+      <p><code>echo 1 > /proc/sys/net/ipv4/ip_forward</code></p>
+    </ol>
+
+    <!-- Question 2 -->
+    <div class="question-container">
+      <h2>Question 2</h2>
+      <p>If we disable IP forwarding, can Victim A ping Victim B?</p>
+      <div class="field-group">
+        <label for="pingTest">Answer</label>
+        <input type="text" id="pingTest" placeholder="Yes/No" />
+      </div>
+      <button type="button" id="checkPingAnswer" onclick="checkPingAnswer()">Submit Answer</button>
+      <div id="result2"></div>
+    </div>
+
+    <h3>Telnet Setup:</h3>
+    <ol>
+      <li>On Victim B, run the following to start the Telnet server:</li>
+      <p><code>service openbsd-inetd restart</code></p>
+
+      <li>On Victim A, telnet to Victim B and log in with Username (alice) and password (password123):</li>
+      <p><code>telnet 192.168.200.11</code></p>
+    </ol>
+
+    <h3>Packet Modification:</h3>
+    <ol>
+      <li>Disable IP forwarding on Attacker:</li>
+      <p><code>echo 0 > /proc/sys/net/ipv4/ip_forward</code></p>
+
+      <li>On Attacker, run the packet modifier to swap characters between Victim A and Victim B:</li>
+      <p><code>python3 packet_modifier.py</code></p>
+    </ol>
+
+    <!-- Question 3 -->
+    <div class="question-container">
+      <h2>Question 3</h2>
+      <p>The Packet Modifier swaps two characters in the TCP packets from Victim A to Victim B. Please find out what two letters are swapped.</p>
+      <div class="field-group">
+        <label for="originalChar">Original Character</label>
+        <input type="text" id="originalChar" placeholder="e.g. b" />
+      </div>
+      <div class="field-group">
+        <label for="modifiedChar">Modified Character</label>
+        <input type="text" id="modifiedChar" placeholder="e.g. P" />
+      </div>
+      <button type="button" id="checkPacketModifier" onclick="checkPacketModifier()">Submit Answer</button>
+      <div id="result3"></div>
+    </div>
+
+    <div class="task-instructions">
+      <h3>Task 1</h3>
+      <p>Use Wireshark to capture ARP and Telnet traffic.</p>
+      <p>Observe unsolicited ARP replies sent by the attacker. </p>
+      <p>Inspect Telnet sessions to verify successful interception and packet modification. </p>
+      <p>Identify packet anomalies related to ARP cache poisoning. </p>
+      <p>Document your findings. </p>
+      <p></p>
+    </div>
+
+  </div>
+</details>
+
+<!-- Part 3: IDS + Defense Mechanisms -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Part 3.</span> IDS + Defense Mechanisms
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Important Note:</h3>
+    <p>
+      In this lab, we only explain detection and defense mechanisms. We are not deploying Snort yet.
+      IDS deployment will be performed later in the dedicated IDS Lab.
+    </p>
+
+    <h3>Detection:</h3>
+    <p>
+      Snort is an open-source Intrusion Detection System (IDS) capable of monitoring network traffic for anomalies.
+      To detect ARP cache poisoning attacks, Snort can be configured with rules that flag abnormal ARP behavior, such as:
+    </p>
+    <ul>
+      <li>High frequency of unsolicited ARP replies.</li>
+      <li>ARP responses that are not preceded by a corresponding ARP request.</li>
+      <li>Conflicting ARP mappings (where a single IP address is associated with multiple MAC addresses).</li>
+    </ul>
+    <p>
+      Monitoring Snort alerts and comparing current ARP traffic against a baseline of normal activity helps identify ARP poisoning attacks quickly and efficiently.
+    </p>
+
+    <h3>Defense Mechanisms:</h3>
+    <p>
+      Mitigating ARP spoofing attacks involves multiple layers of defense to protect the integrity of ARP communications:
+    </p>
+    <ul>
+      <li><strong>Static ARP Entries:</strong> Manually configure critical devices (such as routers and servers) with static IP-to-MAC mappings to prevent unauthorized changes.</li>
+      <li><strong>Dynamic ARP Inspection (DAI):</strong> Use network switches that support DAI to validate ARP packets against trusted DHCP bindings and block invalid ARP messages.</li>
+      <li><strong>Network Segmentation:</strong> Divide the network into VLANs to limit the broadcast domain and contain the potential impact of an ARP poisoning attack.</li>
+      <li><strong>Continuous Monitoring:</strong> Deploy IDS solutions like Snort to detect abnormal ARP activity and maintain a continuous baseline of expected network behavior.</li>
+      <li><strong>Secure Communication Protocols:</strong> Implement encrypted and authenticated communication channels (such as IPSec) to protect sensitive traffic even if ARP poisoning occurs.</li>
+    </ul>
+    <p>
+      Combining these defensive strategies significantly reduces the risk and potential damage of ARP spoofing attacks within a network.
+    </p>
+  </div>
+</details>
+
+<script>
+// Check answers for Question 1
+function checkAnswers() {
+  const victimA = document.getElementById('victimA').value;
+  const victimB = document.getElementById('victimB').value;
+  
+  const correctAnswers = {
+    victimA: "86:df:03:18:3d:d9", // replace with expected correct MAC
+    victimB: "86:df:03:18:3d:d9"  // replace with expected correct MAC
+  };
+
+  let result = '';
+  if (victimA === correctAnswers.victimA && victimB === correctAnswers.victimB) {
+    result = 'Correct! MAC addresses updated as expected.';
+  } else {
+    result = 'Incorrect. Please check the MAC addresses.';
+  }
+  document.getElementById('result1').innerHTML = result;
+}
+
+// Check answers for Question 2
+function checkPingAnswer() {
+  const pingTest = document.getElementById('pingTest').value.toLowerCase();
+  const result = pingTest === 'no' ? 'Correct! Victim A cannot ping Victim B when IP forwarding is disabled.' : 'Incorrect. Try again!';
+  document.getElementById('result2').innerHTML = result;
+}
+
+// Check answers for Question 3
+function checkPacketModifier() {
+  const originalChar = document.getElementById('originalChar').value;
+  const modifiedChar = document.getElementById('modifiedChar').value;
+
+  const correctAnswers = {
+    original: 'a',  // replace with expected original character
+    modified: 'Z'   // replace with expected modified character
+  };
+
+  let result = '';
+  if (originalChar.toLowerCase() === correctAnswers.original && modifiedChar.toUpperCase() === correctAnswers.modified) {
+    result = 'Correct! Characters swapped as expected.';
+  } else {
+    result = 'Incorrect. Please check the modified characters.';
+  }
+  document.getElementById('result3').innerHTML = result;
+}
+</script>
+
+{% endblock %}

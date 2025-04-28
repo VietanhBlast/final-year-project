@@ -1,0 +1,95 @@
+{# templates/index.html #}
+{% extends "Base.html" %}
+{% block title %}Home – Network Attack Simulation for training {% endblock %}
+
+{% block content %}
+<details class="task-box" open>
+  <summary>
+    <span class="task-label">Welcome</span> Network Attack Simulation for training Overview
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <!-- Introduction -->
+    <h3>Introduction</h3>
+    <p>
+      Welcome to the Network Attack Simulation for training. This project provides an isolated environment for learning and 
+      performing common network attacks and at a later stage, you can learn how they can be detected and mitigated. By working 
+      through the labs, users will experience both the offensive and defensive sides of network security, gaining critical insight 
+      into how attackers operate and how defenders can protect their systems.
+    </p>
+    <p>
+      The labs simulate realistic network scenarios, allowing users to explore vulnerabilities, craft custom network packets, 
+      intercept communications, and implement IDS rules.
+    </p>
+
+    <!-- About This Project -->
+    <h3>About This Project</h3>
+    <p>
+      This project focuses on teaching the fundamental concepts of network attack. It covers a series of common network attacks including:
+    </p>
+    <ul>
+      <li>Intro to Scapy and how to use Wireshark/Edgeshark on Docker containers</li>
+      <li>Reconnaissance and Service Enumeration using Nmap</li>
+      <li>ARP Cache Poisoning and Man-in-the-Middle (MITM) Attacks</li>
+      <li>Denial of Service (DoS) Attacks through SYN and TCP Flooding</li>
+      <li>TCP Reset Attack to Disrupt Active Connections</li>
+      <li>Reverse Shell Injection into Active Telnet Sessions</li>
+    </ul>
+    <p>
+      Users will utilize Scapy to craft custom packets and simulate attacks, and Wireshark to capture and analyze network traffic.
+      Finally, defensive users will learn how to deploy Snort, a powerful Intrusion Detection System (IDS), to detect these attacks.
+    </p>
+    <p>
+      The labs are designed to provide a complete learning experience—from launching attacks, to analyzing network traffic, 
+      to detecting them using IDS, and finally learning how to defend against them.
+    </p>
+    <p>
+      There will also be a final “Challenges” page offering additional tasks for users who want to further practice their skills.
+    </p>
+
+    <!-- Learning Objectives -->
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Understand the mechanics behind key network attacks at the protocol level.</li>
+      <li>Gain practical experience crafting packets and simulating attacks using Scapy.</li>
+      <li>Develop skills in network traffic analysis using Wireshark.</li>
+      <li>Learn how to detect common attacks using Snort and IDS rule creation.</li>
+      <li>Explore defense strategies such as static ARP entries, firewalls, and segmentation.</li>
+      <li>Understand the importance of proactive monitoring and defense in modern network security.</li>
+    </ul>
+  </div>
+</details>
+
+
+<div class="task-box">
+  <h3>Lab Setup and Configuration</h3>
+  <p>This section provides commands to set up your Docker containers for the security lab. Execute these commands in your terminal to start the required containers:</p>
+
+  <div class="task-instructions">
+    <h4>Docker Commands to Set Up Containers</h4>
+    <pre>
+docker run -dit --name victimA --network lab-net --ip 192.168.200.10 myvictimaimage:v2a
+docker run -dit --name victimB --network lab-net --ip 192.168.200.11 victimbimage:v2b
+docker run -dit --name attacker --network lab-net --ip 192.168.200.100 --privileged attackerimage:v2
+docker run -dit --name hostattacker --network host --cap-add=NET_ADMIN --cap-add=NET_RAW hostattackerimage:v2
+    </pre>
+  </div>
+</div>
+
+<!-- Second box for setting up the network -->
+<div class="task-box">
+  <h3>Network Setup Commands</h3>
+  <p>Run these commands to set up the network and configure the containers with appropriate permissions and IPs. Ensure the Docker network 'lab-net' is created before running these commands:</p>
+  <div class="task-instructions">
+    <h4>Set Up Docker Containers with Specific IPs</h4>
+    <pre>
+docker network create --subnet=192.168.200.0/24 lab-net
+docker run -dit --name victimA --network lab-net --ip 192.168.200.10 myvictimaimage:v2a
+docker run -dit --name victimB --network lab-net --ip 192.168.200.11 victimbimage:v2b
+docker run -dit --name attacker --network lab-net --ip 192.168.200.100 --privileged attackerimage:v2
+docker run -dit --name hostattacker --network host --cap-add=NET_ADMIN --cap-add=NET_RAW hostattackerimage:v2
+    </pre>
+  </div>
+</div>
+</details>
+{% endblock %}

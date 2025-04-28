@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Network Attack Simulation for training {% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div id="page-wrapper">
+    <header>
+      <h1>Network Attack Simulation for training </h1>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a href="{{ url_for('python_scapy') }}">Wireshark+scapy Lab</a></li>
+          <li><a href="{{ url_for('recon_lab') }}">Recon Lab</a></li>
+          <li><a href="{{ url_for('arp_lab') }}">ARP Lab</a></li>
+          <li><a href="{{ url_for('ddos_lab') }}">DDoS Lab</a></li>
+          <li><a href="{{ url_for('tcp_lab') }}">tcp lab</a></li>
+          <li><a href="{{ url_for('IDS_lab') }}">IDS lab</a></li>
+          <li><a href="{{ url_for('Chl_lab') }}">Challenges</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+      &copy; 2025 Defensive Security Lab | Educational Purposes Only
+    </footer>
+  </div>
+</body>
+</html>

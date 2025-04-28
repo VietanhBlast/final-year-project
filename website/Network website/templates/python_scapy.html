@@ -1,0 +1,130 @@
+{% extends "Base.html" %}
+{% block title %}Scapy and Wireshark Lab{% endblock %}
+{% block content %}
+<!-- Part 1: Introduction to Scapy -->
+<details class="task-box" open>
+  <summary>
+    <span class="task-label">Part 1.</span> Introduction to Scapy
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Introduction</h3>
+    <p>
+      Scapy is a powerful Python-based tool used for packet manipulation, network analysis, and security testing. 
+      It allows users to create, send, receive, and manipulate network packets at multiple protocol layers, making it invaluable 
+      for network engineers, penetration testers, and cybersecurity researchers.
+    </p>
+
+    <h4>Scapy Overview</h4>
+    <p>Scapy offers a wide range of capabilities, including:</p>
+
+    <ul class="scapy-list">
+      <li><strong>Create Packets from Scratch:</strong> Build packets at various layers such as Ethernet, IP, TCP, UDP, ARP, and DNS, allowing complete customization.</li>
+      <li><strong>Send Packets Over a Network:</strong> Transmit crafted packets at Layer 2 (data link) or Layer 3 (network) to interact with devices directly or simulate traffic.</li>
+      <li><strong>Sniff (Capture) Packets on the Network:</strong> Capture live network traffic for analysis or interception, with full access to packet fields and payloads.</li>
+      <li><strong>Spoofing:</strong> Forge packet fields like source IP or MAC addresses to disguise the true origin of network traffic.</li>
+      <li><strong>Modify Packets:</strong> Intercept and alter packet headers, payloads, or entire packets for purposes like data injection or redirection.</li>
+      <li><strong>Craft Attacks:</strong> Implement network attacks such as ARP cache poisoning, TCP session hijacking, and SYN flood Denial-of-Service (DoS) attacks.</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Part 2: Tasks -->
+<details class="task-box">
+    <summary>
+      <span class="task-label">Part 2.</span> Tasks
+      <span class="arrow-icon">&#9656;</span>
+    </summary>
+    <div class="task-content">
+      <h3>Task 1: Create and Send a Packet</h3>
+      <p>Build a TCP SYN packet targeting a remote IP address in 192.168.200.0/24.</p>
+      <p>Send the packet on interface br-f8bfae7ae31c.</p>
+      <p>Print the packet structure.</p>
+      <div class="task-instructions">
+        <p><strong>Example Code:</strong></p>
+        <img src="{{ url_for('static', filename='images/1.png') }}" alt="Example Code Image" />
+      </div>
+  
+      <h3>Task 2: Sniff Network Traffic</h3>
+      <p>Capture 5 packets on br-f8bfae7ae31c.</p>
+      <p>Print the details of each captured packet.</p>
+      <div class="task-instructions">
+        <p><strong>Example Code:</strong></p>
+        <img src="{{ url_for('static', filename='images/2.png') }}" alt="Example Code Image" />
+      </div>
+  
+      <h3>Task 3: Spoofing IP Addresses</h3>
+      <p>Craft a TCP SYN packet with a spoofed source IP.</p>
+      <p>Send it to a victim in 192.168.200.0/24.</p>
+      <p>Print the spoofed packet structure.</p>
+      <div class="task-instructions">
+        <p><strong>Example Code:</strong></p>
+        <img src="{{ url_for('static', filename='images/3.png') }}" alt="Example Code Image" />
+      </div>
+  
+      <h3>Task 4: Modify and Resend Packets</h3>
+      <p>Capture one packet from the network.</p>
+      <p>Modify its destination IP.</p>
+      <p>Resend it after modification.</p>
+      <p>Print before and after modification.</p>
+      <div class="task-instructions">
+        <p><strong>Example Code:</strong></p>
+        <img src="{{ url_for('static', filename='images/4.png') }}" alt="Example Code Image" />
+      </div>
+  
+      <h3>Important Note</h3>
+      <p>The attacks are already made for you, but a reminder that this only shows what is needed to do and learn the required task on this website. If you want to really learn in depth about Scapy, go here:</p>
+      <p><a href="https://scapy.readthedocs.io/en/latest/introduction.html" target="_blank">Scapy Documentation</a></p>
+    </div>
+  </details>
+
+<!-- Part 3: Using Wireshark/Egdeshark for Traffic Capture -->
+<details class="task-box">
+    <summary>
+      <span class="task-label">Part 3.</span> Using Wireshark/Egdeshark for Traffic Capture
+      <span class="arrow-icon">&#9656;</span>
+    </summary>
+    <div class="task-content">
+      <h3>How to Use Wireshark/Egdeshark</h3>
+      <p>Wireshark is a network protocol analyzer that allows you to capture and analyze packets on a network interface. This part of the lab will guide you on how to set up Wireshark with Docker containers to capture network traffic.</p>
+      
+      <h4>Step 1: Turn on the EdgeShark Containers</h4>
+      <p>Start the EdgeShark containers before proceeding with the packet capture.</p>
+      <div class="task-instructions">
+        <p><strong>Example Image:</strong></p>
+        <img src="{{ url_for('static', filename='images/5.png') }}" alt="EdgeShark Containers Setup" />
+      </div>
+  
+      <h4>Step 2: Launch Wireshark with the Correct Plugin Path</h4>
+      <p>To use Wireshark with Docker, you need to set the correct plugin path. Run the following command:</p>
+      <pre>WIRESHARK_EXTCAP_DIR=~/.config/wireshark/extcap wireshark</pre>
+      <p>This will enable Wireshark to capture packets from Docker containers.</p>
+      <div class="task-instructions">
+        <p><strong>Example Image:</strong></p>
+        <img src="{{ url_for('static', filename='images/6.png') }}" alt="Wireshark Capture Plugin" />
+      </div>
+  
+      <h4>Step 3: Select the Docker Host Capture</h4>
+      <p>After launching Wireshark, you should see a capture interface similar to the one below. Select <strong>Docker host capture (click on gear)</strong> to start capturing packets from Docker containers.</p>
+      <div class="task-instructions">
+        <p><strong>Example Image:</strong></p>
+        <img src="{{ url_for('static', filename='images/7.png') }}" alt="Select Docker Host Capture" />
+      </div>
+  
+      <h4>Step 4: Choose the Container to Spy On</h4>
+      <p>In the URL section, enter <strong>http://localhost:5001</strong> and click refresh. Choose a container to spy on and start capturing its traffic. Wireshark will display real-time packet data from the selected container.</p>
+      <div class="task-instructions">
+        <p><strong>Example Image:</strong></p>
+        <img src="{{ url_for('static', filename='images/8.png') }}" alt="Wireshark Select Container" />
+      </div>
+  
+      <h3>Important Notes</h3>
+      <ul>
+        <li>Make sure Docker is running and the containers are up before using Wireshark.</li>
+        <li>If the containers do not show up in the list, refresh the Wireshark interface or check Docker's network settings.</li>
+        <li>Wireshark captures live network traffic, so use it responsibly and monitor only authorized networks.</li>
+      </ul>
+    </div>
+  </details>
+
+{% endblock %}

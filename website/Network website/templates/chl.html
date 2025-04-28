@@ -1,0 +1,113 @@
+{% extends "Base.html" %}
+{% block title %}Network Security Challenges{% endblock %}
+{% block content %}
+<!-- Challenges Page Title -->
+<h2>Network Security Challenges</h2>
+<p>Welcome to the challenges page! This section contains various tasks designed to enhance your skills in network security. These challenges will help you apply the concepts you've learned from the labs to solve real-world security problems. Good luck!</p>
+
+<!-- Challenge 1: Ping of Death -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Challenge 1:</span> Ping of Death Attack
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Task Overview</h3>
+    <p>In this challenge, you will exploit a vulnerability in the IP protocol by sending a maliciously crafted ping request, known as the "Ping of Death," to a victim machine. The objective is to cause the target system to crash or behave abnormally.</p>
+    <h4>Challenge Requirements</h4>
+    <ul>
+      <li>Craft a ping request with a size greater than the maximum allowed size (e.g., 65,535 bytes).</li>
+      <li>Send this oversized ping to a victim machine (ensure the victim machine is configured to allow ICMP traffic).</li>
+      <li>Observe the impact of the attack on the victim machine.</li>
+    </ul>
+    <h4>Key Skills Tested</h4>
+    <ul>
+      <li>Crafting oversized ICMP packets</li>
+      <li>Exploit vulnerabilities in the IP protocol</li>
+      <li>Understanding the consequences of malformed packets</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Challenge 2: Replay Attack -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Challenge 2:</span> Replay Attack
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Task Overview</h3>
+    <p>In this challenge, you will perform a replay attack where previously captured valid packets are retransmitted to impersonate the sender. The goal is to simulate an attacker intercepting and reusing network traffic to gain unauthorized access or trigger an action.</p>
+    <h4>Challenge Requirements</h4>
+    <ul>
+      <li>Capture a valid packet from a network session.</li>
+      <li>Replay the captured packet to perform an action like re-executing a command or replaying a transaction.</li>
+      <li>Monitor the response from the target system to verify the attack was successful.</li>
+    </ul>
+    <h4>Key Skills Tested</h4>
+    <ul>
+      <li>Packet capture and analysis</li>
+      <li>Packet replay and spoofing</li>
+      <li>Understanding how replay attacks can bypass authentication and other security mechanisms</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Challenge 3: IDS Evasion -->
+<details class="task-box">
+  <summary>
+    <span class="task-label">Challenge 3:</span> Modify Attacks to Avoid IDS Detection
+    <span class="arrow-icon">&#9656;</span>
+  </summary>
+  <div class="task-content">
+    <h3>Task Overview</h3>
+    <p>In this challenge, you will take existing attacks (e.g., SYN flood, ARP spoofing, etc.) and modify them to evade detection by an Intrusion Detection System (IDS), such as Snort. The goal is to understand how attack signatures can be altered to avoid triggering security systems.</p>
+    <h4>Challenge Requirements</h4>
+    <ul>
+      <li>Select an existing attack (e.g., SYN flood, ARP spoofing, DDoS).</li>
+      <li>Modify your attack to avoid detection by Snort.</li>
+      <li>Test whether the modified attack triggers an alert in Snort.</li>
+    </ul>
+    <h4>Key Skills Tested</h4>
+    <ul>
+      <li>Understanding IDS signatures and detection techniques</li>
+      <li>Modifying attack traffic to evade IDS</li>
+      <li>Testing the effectiveness of IDS evasion</li>
+    </ul>
+  </div>
+</details>
+
+<!-- Challenge 4: Network Scan Detection Evasion -->
+<details class="task-box">
+    <summary>
+      <span class="task-label">Challenge 4:</span> Network Scan Detection Evasion
+      <span class="arrow-icon">&#9656;</span>
+    </summary>
+    <div class="task-content">
+      <h3>Task Overview</h3>
+      <p>In this challenge, you will use Nmap (use the codes in the Recon lab) to perform a network scan and then modify your scanning technique to bypass detection by Snort or another IDS. The objective is to understand how scan detection works and how attackers can evade IDS systems.</p>
+      
+      <h4>Challenge Requirements</h4>
+      <ul>
+        <li>Perform a basic Nmap scan on a target network.</li>
+        <li>Modify your Nmap scan to avoid detection by Snort, using options like timing, decoy scans, or fragmenting packets.</li>
+        <li>Observe if Snort detects the modified scan.</li>
+      </ul>
+      
+      <h4>Key Skills Tested</h4>
+      <ul>
+        <li>Using Nmap for network scanning</li>
+        <li>Scan evasion techniques</li>
+        <li>Understanding how IDS can detect and block network reconnaissance</li>
+      </ul>
+      
+      <h4>Challenge 4: Modify the Pre-made Attacks to Avoid IDS Detection</h4>
+      <p>For this challenge, your goal is to modify the existing attacks to avoid detection by the IDS. To do this, focus on adjusting the timing and scan type, as well as using techniques like decoy scanning and scan stealth.</p>
+      
+      <p><strong>Hint:</strong> You can modify the Nmap command by changing the timing to <code>-T1</code>, using decoy scanning with <code>-D</code>, and experimenting with scan stealth techniques.</p>
+    </div>
+  </details>
+  
+
+{% endblock %}
+
